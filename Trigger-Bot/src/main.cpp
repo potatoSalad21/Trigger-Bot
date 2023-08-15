@@ -32,8 +32,8 @@ int main()
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-		// check if shift key is down
-		if (!GetAsyncKeyState(VK_SHIFT))
+		// check if ctrl key is down
+		if (!GetAsyncKeyState(VK_CONTROL))
 			continue;
 
 		const auto localPlayer = mem.Read<uintptr_t>(client + offsets::dwLocalPlayer);
@@ -63,10 +63,9 @@ int main()
 		if (mem.Read<int32_t>(target + offsets::m_iTeamNum) == playerTeam)
 			continue;
 
-
-
-
-
+		mem.Write<uintptr_t>(client + offsets::dwForceAttack, 6);
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
+		mem.Write<uintptr_t>(client + offsets::dwForceAttack, 4);
 	}
 
 	return 0;
