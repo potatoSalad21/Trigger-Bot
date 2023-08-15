@@ -32,9 +32,40 @@ int main()
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-		// continue if shift key isn't down
+		// check if shift key is down
 		if (!GetAsyncKeyState(VK_SHIFT))
 			continue;
+
+		const auto localPlayer = mem.Read<uintptr_t>(client + offsets::dwLocalPlayer);
+
+		// check if player is dead
+		if (!mem.Read<int32_t>(localPlayer + offsets::m_iHealth)) 
+			continue;
+
+		const auto crosshairId = mem.Read<int32_t>(localPlayer + offsets::m_iCrosshairId);
+
+		/*	Ids 1 through 64 are reserved for players
+			if id is more than 64 player isn't looking at other players
+		*/
+		if (!crosshairId || crosshairId > 64)
+			continue;
+
+		// * entities have a size of 0x10 in memory
+		const auto target = mem.Read<uintptr_t>(client + offsets::dwEntityList + (crosshairId - 1) * 0x10);
+
+		// check if target is dead
+		if (!mem.Read<int32_t>(target + offsets::m_iHealth)) 
+			continue;
+
+		const auto playerTeam = mem.Read<int32_t>(localPlayer + offsets::m_iTeamNum);
+
+		// check if target is an ally
+		if (mem.Read<int32_t>(target + offsets::m_iTeamNum) == playerTeam)
+			continue;
+
+
+
+
 
 	}
 
