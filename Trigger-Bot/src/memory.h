@@ -38,5 +38,9 @@ public:
 		return WriteProcessMemory(this->hProc, (LPVOID)address, &value, sizeof(T), 0);
 	}
 
-	~Memory();
+	~Memory()
+	{
+		if (this->hProc)
+			CloseHandle(hProc);
+	}
 };

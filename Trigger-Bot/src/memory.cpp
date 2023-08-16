@@ -49,9 +49,3 @@ uintptr_t Memory::getModuleAddress(const char* name)
 	CloseHandle(mSnap);
 	return module;
 }
-
-Memory::~Memory()
-{
-	if (this->hProc)
-		CloseHandle(hProc);
-}

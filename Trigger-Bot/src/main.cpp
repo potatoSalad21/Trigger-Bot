@@ -3,7 +3,6 @@
 #include <thread>
 #include <cstdint>
 
-
 namespace offsets
 {
 	// client
